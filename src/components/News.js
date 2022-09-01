@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import NewsItem from './NewsItem'
 
 export class News extends Component {
-    article = [
+    articles = [
         {
             "source": {
                 "id": "espn-cric-info",
@@ -34,6 +34,8 @@ export class News extends Component {
         super();
         console.log("I am constructor from news component");
         this.state = {
+            articles: this.articles,
+            loading: false
 
         }
     }
@@ -41,34 +43,17 @@ export class News extends Component {
         return (
             <div className='container my-3'>
                 <h2>NewsMonkey-Top Headlines</h2>
+                {/* {this.state.articles.map((element) => { console.log(element) })} */}
                 <div className="row">
-                    <div className="col-md-4">
-                        <NewsItem title="myTitle" description="mydesc" imageUrl="https://a4.espncdn.com/combiner/i?img=%2Fi%2Fcricket%2Fcricinfo%2F1219926_1296x729.jpg" newsUrl="TODO" />
+                    {this.state.articles.map((element) => {
+                        // console.log(element)
+                        return <div className="col-md-4" key={element.url}>
+                            <NewsItem title={element.title.slice(0, 45)} description={element.description.slice(0, 88)} imageUrl={element.urlToImage} newsUrl={element.url} />
 
-                    </div>
-                    <div className="col-md-4">
-                        <NewsItem title="myTitle2" description="mydesc2" />
+                        </div>
+                    })}
 
-                    </div>
-                    <div className="col-md-4">
-                        <NewsItem title="myTitle3" description="mydesc3" />
 
-                    </div>
-
-                </div>
-                <div className="row my-3">
-                    <div className="col-md-4">
-                        <NewsItem title="myTitle4" description="mydesc4" />
-
-                    </div>
-                    <div className="col-md-4">
-                        <NewsItem title="myTitle5" description="mydesc5" />
-
-                    </div>
-                    <div className="col-md-4">
-                        <NewsItem title="myTitle6" description="mydesc6" />
-
-                    </div>
 
                 </div>
             </div>

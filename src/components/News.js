@@ -96,9 +96,9 @@ export class News extends Component {
                 {/* {this.state.articles.map((element) => { console.log(element) })} */}
                 <div className="row">
                     {!this.state.loading && this.state.articles.map((element) => {
-                        // console.log(element)
+                        // console.log(element) yaha pe element may function k ander wala hai app.js k route wala ni.
                         return <div className="col-md-4" key={element.url}>
-                            <NewsItem title={element.title ? element.title.slice(0, 45) : ""} description={element.description ? element.description.slice(0, 88) : ""} imageUrl={element.urlToImage} newsUrl={element.url} />
+                            <NewsItem title={element.title ? element.title.slice(0, 45) : ""} description={element.description ? element.description.slice(0, 88) : ""} imageUrl={element.urlToImage} newsUrl={element.url} author={element.author} date={element.publishedAt} source={element.source.name} />
 
                         </div>
                     })}

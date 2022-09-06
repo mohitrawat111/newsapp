@@ -29,11 +29,10 @@ export class News extends Component {
         console.log("State inside constructor(initial state):-")//to check state of a page
         console.log(this.state)
     }
-    async componentDidMount() {
 
-        //const headers = { 'Content-Type': 'application/json' }
+    async updateNews() {
         console.log("cmd")
-        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=699ed333a90a487c8409774371b60a48&page=1&pageSize=${this.props.pageSize}`;
+        const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=699ed333a90a487c8409774371b60a48&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         this.setState({ loading: true });
         let data = await fetch(url);
 
@@ -43,45 +42,22 @@ export class News extends Component {
         this.setState({ articles: parseddata.articles, totalResults: parseddata.totalResults, loading: false })
 
     }
+
+    async componentDidMount() {
+        this.updateNews();
+
+    }
     handlprevclick = async () => {
-        console.log("previous");
-        console.log("next");
-        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=699ed333a90a487c8409774371b60a48&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
-        this.setState({ loading: true });
-        let data = await fetch(url);
 
-        let parseddata = await data.json();
-        console.log(parseddata);
-        console.log(data);
-
-        this.setState({
-            page: this.state.page - 1,
-            articles: parseddata.articles,
-            loading: false
-        })
-        // console.log(this.state.page)
+        this.setState({ page: this.state.page - 1 });
+        this.updateNews();
 
 
     }
     handlenextclick = async () => {
         console.log("next");
-        if (!(this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pageSize))) {
-            // refactor- If not of
-            let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=699ed333a90a487c8409774371b60a48&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;// ye state k page se page ko le k usme se +1 kra hai
-            this.setState({ loading: true });
-            let data = await fetch(url);
-
-            let parseddata = await data.json();
-            console.log(parseddata);
-            console.log(data);
-
-            this.setState({
-                page: this.state.page + 1, // agar hum ishko yha pe set ni kerege toh ek sirf ek br page+1 hog url pe kyuki url pe bhi +1 hai.ye state k page ko +1  set kra hai
-                articles: parseddata.articles,
-                loading: false
-            })
-            // console.log(this.state.page)
-        }
+        this.setState({ page: this.state.page + 1 });
+        this.updateNews();
 
     }
     render() {

@@ -33,38 +33,28 @@ export class News extends Component {
     }
 
     async updateNews() {
+        this.props.setProgress(10);
         console.log("cmd")
-        const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=699ed333a90a487c8409774371b60a48&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+        const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=7e89a3b8fe5a48edb53ff5862604f596&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         this.setState({ loading: true });
         let data = await fetch(url);
-
+        this.props.setProgress(30);
         let parseddata = await data.json();
+        this.props.setProgress(70);
         console.log(parseddata);
         console.log(data);
         this.setState({ articles: parseddata.articles, totalResults: parseddata.totalResults, loading: false })
-
+        this.props.setProgress(100);
     }
 
     async componentDidMount() {
         this.updateNews();
 
     }
-    // handlprevclick = async () => {
 
-    //     this.setState({ page: this.state.page - 1 });
-    //     this.updateNews();
-
-
-    // }
-    // handlenextclick = async () => {
-    //     console.log("next");
-    //     this.setState({ page: this.state.page + 1 });
-    //     this.updateNews();
-
-    // }
     fetchMoreData = async () => {
         this.setState({ page: this.state.page + 1 });
-        const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=699ed333a90a487c8409774371b60a48&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+        const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=7e89a3b8fe5a48edb53ff5862604f596&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         // this.setState({ loading: true });
         let data = await fetch(url);
 
@@ -96,9 +86,10 @@ export class News extends Component {
                 >
                     <div className="container">
                         <div className="row">
-                            {this.state.articles.map((element) => {
+                            {this.state.articles.map((element, index) => {
                                 // console.log(element) yaha pe element may function k ander wala hai app.js k route wala ni.
-                                return <div className="col-md-4" key={element.url}>
+                                //key should be unique otherwise error:-Encountered two children with the same key" occurs when two or more of the elements we return from the map() method have the same key prop.To solve the error, provide a unique value for the key prop on each element or use the index parameter ie replace key={element.url} with key={index} or key={Math.random()}
+                                return <div className="col-md-4" key={Math.random()}>
                                     <NewsItem title={element.title ? element.title.slice(0, 45) : ""} description={element.description ? element.description.slice(0, 88) : ""} imageUrl={element.urlToImage} newsUrl={element.url} author={element.author} date={element.publishedAt} source={element.source.name} />
 
                                 </div>
@@ -108,10 +99,7 @@ export class News extends Component {
 
                     </div>
                 </InfiniteScroll>
-                {/* <div className="container d-flex justify-content-between">
-                    <button disabled={this.state.page <= 1} type="button" className="btn btn-dark" onClick={this.handlprevclick}>&larr;Previous</button>
-                    <button disabled={this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pageSize)} type="button" className="btn btn-dark" onClick={this.handlenextclick}>Next&rarr;</button>
-                </div> */}
+
             </>
         )
     }
